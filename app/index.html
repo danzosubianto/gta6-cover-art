@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon Tide Cover Studio</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<main class="studio">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <h1>Neon Tide Cover Studio</h1>
+        <p>Your photo + a headline = poster-style cover art. Everything happens on your machine.</p>
+      </div>
+    </div>
+    <div class="export-box">
+      <label class="size-label">Artboard
+        <select id="size">
+          <option value="1080x1080">Square post · 1080 × 1080</option>
+          <option value="1080x1350" selected>Portrait post · 1080 × 1350</option>
+          <option value="1920x1080">Wide post · 1920 × 1080</option>
+        </select>
+      </label>
+      <button id="export" type="button">Export PNG</button>
+      <p id="status" role="status"></p>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="controls">
+      <section>
+        <h2>1 · Photo</h2>
+        <label class="file-label">Add your photos
+          <input id="photo" type="file" accept="image/*" multiple>
+        </label>
+        <p class="hint">…or start from a built-in scene, drawn in code:</p>
+        <div class="demo-row">
+          <button type="button" data-demo="boulevard">Boulevard Dusk</button>
+          <button type="button" data-demo="pier">Neon Pier</button>
+          <button type="button" data-demo="beach">Palm Beach</button>
+        </div>
+        <div id="thumbs" class="thumbs" aria-label="Loaded photos"></div>
+        <label class="mode-label">Panels use
+          <select id="fillmode">
+            <option value="single" selected>one photo, cropped per panel</option>
+            <option value="multi">a different photo per panel</option>
+          </select>
+        </label>
+      </section>
+
+      <section>
+        <h2>2 · Panels</h2>
+        <div class="layout-grid" id="layouts">
+          <button type="button" data-layout="poster" class="on">Poster Grid</button>
+          <button type="button" data-layout="hero">Hero &amp; Strips</button>
+          <button type="button" data-layout="triptych">Triptych</button>
+          <button type="button" data-layout="fullbleed">Full Bleed</button>
+        </div>
+        <p class="hint">Click a panel on the cover to select it. Drag inside it to move its photo, scroll to zoom.</p>
+        <label>Panel zoom <input id="zoom" type="range" min="100" max="350" value="100"></label>
+        <button id="resetcrop" type="button" class="quiet">Reset this panel's crop</button>
+      </section>
+
+      <section>
+        <h2>3 · Colour grade</h2>
+        <label>Grade
+          <select id="grade">
+            <option value="sunset" selected>Sunset Boulevard</option>
+            <option value="neon">Neon Nights</option>
+            <option value="golden">Golden Hour</option>
+            <option value="clean">Clean Press</option>
+          </select>
+        </label>
+        <label>Grade strength <input id="gradeamt" type="range" min="0" max="100" value="70"></label>
+      </section>
+
+      <section>
+        <h2>4 · Caption</h2>
+        <label>Headline <input id="caption" type="text" maxlength="26" value="Neon Tide"></label>
+        <label>Strapline <input id="subcaption" type="text" maxlength="44" value="One night in Vice Beach"></label>
+        <label>Lettering
+          <select id="lettering">
+            <option value="chrome" selected>Sunset Chrome</option>
+            <option value="neonpop">Neon Pop</option>
+            <option value="newsprint">Newsprint Bold</option>
+          </select>
+        </label>
+        <label>Headline size <input id="capsize" type="range" min="60" max="130" value="100"></label>
+      </section>
+    </aside>
+
+    <section class="stage">
+      <canvas id="cover" width="1080" height="1350" aria-label="Cover preview"></canvas>
+      <p class="stage-hint">Live preview — the export renders this artboard at full size.</p>
+    </section>
+  </div>
+</main>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

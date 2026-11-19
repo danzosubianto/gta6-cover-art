@@ -1,0 +1,115 @@
+/* Neon Tide Cover Studio — editor chrome.
+   The cover itself is drawn on the canvas; this sheet only dresses the
+   studio around it: a dark newsroom with a sunset accent, so the art on
+   stage stays the brightest thing on the page. */
+
+:root {
+  --ink: #101018;
+  --panel: #1a1a26;
+  --panel-2: #22222f;
+  --line: #34344a;
+  --text: #f2ede4;
+  --muted: #a9a3b8;
+  --sunset: #ff7847;
+  --magenta: #ff3d8a;
+  --gold: #ffc44d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font: 15px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.studio { max-width: 1560px; margin: 0 auto; padding: 18px 22px 30px; }
+
+/* --- top bar ----------------------------------------------------------- */
+.topbar {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;
+  justify-content: space-between; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; gap: 14px; align-items: center; }
+.brand-mark {
+  width: 46px; height: 46px; border-radius: 10px; flex: none;
+  background:
+    radial-gradient(circle at 50% 78%, #ffd76a 0 26%, transparent 27%),
+    linear-gradient(180deg, #2b1055 0%, #7597de 34%, #ff3d8a 62%, #ff7847 82%, #2b1055 82.5%);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.25);
+}
+.brand h1 { margin: 0; font-size: 24px; letter-spacing: .4px; }
+.brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+
+.export-box { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.export-box label { color: var(--muted); font-size: 13px; display: grid; gap: 4px; }
+#status { margin: 0; color: var(--gold); font-size: 13px; min-height: 1em; }
+
+/* --- layout ------------------------------------------------------------ */
+.workspace { display: grid; grid-template-columns: 320px 1fr; gap: 22px; margin-top: 18px; }
+.controls { display: grid; gap: 18px; align-content: start; }
+.controls section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px 16px;
+}
+.controls h2 { margin: 0 0 10px; font-size: 14px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold); }
+.controls label { display: grid; gap: 5px; margin: 10px 0; font-size: 13.5px; }
+.hint { color: var(--muted); font-size: 12.5px; margin: 8px 0; }
+
+.stage { display: grid; justify-items: center; align-content: start; gap: 10px; }
+#cover {
+  max-width: min(100%, 74vh); max-height: 74vh; width: auto; height: auto;
+  background: #000; border-radius: 6px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px var(--line);
+  cursor: grab; touch-action: none;
+}
+#cover:active { cursor: grabbing; }
+.stage-hint { color: var(--muted); font-size: 12.5px; margin: 0; }
+
+/* --- controls ---------------------------------------------------------- */
+button {
+  font: inherit; color: var(--text); background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer;
+}
+button:hover { border-color: var(--sunset); }
+button.on { background: linear-gradient(120deg, #571c87, #93268f); border-color: var(--magenta); }
+button.quiet { font-size: 12.5px; padding: 6px 10px; }
+#export {
+  background: linear-gradient(120deg, #ff7847, #ff3d8a); border: none;
+  font-weight: 700; padding: 11px 18px; color: #fff;
+}
+select, input[type="text"] {
+  font: inherit; color: var(--text); background: var(--ink);
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; width: 100%;
+}
+input[type="range"] { width: 100%; accent-color: var(--sunset); }
+input[type="file"] { font-size: 12.5px; color: var(--muted); }
+.file-label { border: 1px dashed var(--line); border-radius: 8px; padding: 10px; }
+
+.demo-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.demo-row button { font-size: 12.5px; padding: 6px 10px; }
+.layout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.thumbs figure { margin: 0; width: 62px; }
+.thumbs canvas, .thumbs img {
+  width: 62px; height: 46px; object-fit: cover; border-radius: 6px;
+  border: 2px solid var(--line); display: block;
+}
+.thumbs figure.on canvas, .thumbs figure.on img { border-color: var(--gold); }
+.thumbs figcaption { font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 2px; }
+
+/* --- screenshot mode -----------------------------------------------------
+   ?shot=cover strips the studio away and shows the cover alone, edge to
+   edge, so a screenshot of the page is a screenshot of the artwork. */
+body.shot-cover .topbar, body.shot-cover .controls, body.shot-cover .stage-hint { display: none; }
+body.shot-cover .studio { max-width: none; padding: 0; }
+body.shot-cover .workspace { display: block; margin: 0; }
+body.shot-cover .stage { display: block; }
+body.shot-cover #cover { max-width: none; max-height: none; border-radius: 0; box-shadow: none; }
+
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; }
+}
