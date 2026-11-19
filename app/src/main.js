@@ -263,7 +263,13 @@ const api = {
   loadDemo,
   setCaption: (v) => { editor.title = v; $('caption').value = v; },
   setSub: (v) => { editor.sub = v; $('subcaption').value = v; },
-  setLayout: (v) => { if (LAYOUTS[v]) { editor.layout = v; editor.selected = 0; } },
+  setLayout: (v) => {
+    if (!LAYOUTS[v]) return;
+    editor.layout = v;
+    editor.selected = 0;
+    document.querySelectorAll('[data-layout]').forEach((b) => b.classList.toggle('on', b.dataset.layout === v));
+  },
+  setSelected: (v) => { editor.selected = v; },
   setGrade: (v) => { if (GRADES[v]) { editor.grade = v; $('grade').value = v; editor.graded.clear(); } },
   setSize: (v) => {
     const [w, h] = v.split('x').map(Number);

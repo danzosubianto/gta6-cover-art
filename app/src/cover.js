@@ -158,18 +158,25 @@ function drawTracked(ctx, text, cx, y, tracking, paint) {
   }
 }
 
-export function drawHeadline(ctx, text, cx, cy, maxWidth, sizeScale, styleName) {
-  const style = LETTERING[styleName] ?? LETTERING.chrome;
+// The size the headline will actually paint at: start from the asked-for
+// size and step down until the tracked line fits the artboard's width.
+export function measureHeadline(ctx, text, maxWidth, sizeScale) {
   const words = (text || '').trim() || 'Untitled';
   let px = Math.round(150 * sizeScale);
-  ctx.textBaseline = 'middle';
   const setFont = () => { ctx.font = `italic 900 ${px}px ${HEADLINE_FONT}`; };
   setFont();
-  // Shrink to fit: a long headline steps down until it fits the artboard.
   while (px > 40 && trackedWidth(ctx, words, px * 0.02) > maxWidth) {
     px -= 6;
     setFont();
   }
+  return px;
+}
+
+export function drawHeadline(ctx, text, cx, cy, maxWidth, sizeScale, styleName) {
+  const style = LETTERING[styleName] ?? LETTERING.chrome;
+  const words = (text || '').trim() || 'Untitled';
+  const px = measureHeadline(ctx, text, maxWidth, sizeScale);
+  ctx.textBaseline = 'middle';
   const tracking = px * 0.02;
   ctx.save();
   ctx.translate(cx, cy);
@@ -283,8 +290,15 @@ export function renderCover(ctx, state, w, h) {
   ctx.fillStyle = scrim;
   ctx.fillRect(0, h * 0.68, w, h * 0.32);
 
-  const px = drawHeadline(ctx, state.title, w / 2, h * 0.865, w * 0.92, (state.titleScale ?? 1) * (w / 1080), state.lettering);
-  drawStrapline(ctx, state.sub, w / 2, h * 0.865 + px * 0.78, w, state.lettering);
+  // The caption block is laid out from the bottom edge up: strapline first
+  // (its centre a half-line above the margin), then the headline above it,
+  // so a big headline grows upward into the art and never pushes the
+  // strapline off the canvas.
+  const px = measureHeadline(ctx, state.title, w * 0.92, (state.titleScale ?? 1) * (w / 1080));
+  const strapCy = h * 0.972 - px * 0.24;
+  const headCy = strapCy - px * 0.72;
+  drawHeadline(ctx, state.title, w / 2, headCy, w * 0.92, (state.titleScale ?? 1) * (w / 1080), state.lettering);
+  drawStrapline(ctx, state.sub, w / 2, strapCy, w, state.lettering);
 
   // The editor's selection ring (never on an export: exports pass -1).
   if (state.selected >= 0 && layout.panels[state.selected]) {

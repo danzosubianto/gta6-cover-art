@@ -97,6 +97,38 @@ function boulevard() {
   ctx.fillStyle = 'rgba(43,16,85,0.55)';
   for (let i = 0; i < 4; i++) ctx.fillRect(W * 0.62 - 330, H * 0.66 + 18 + i * 26, 660, 7 + i * 3);
 
+  // Dusk cloud bands and a few birds, so the high sky is not empty.
+  for (const [y, len, alpha] of [[150, 620, 0.16], [235, 430, 0.13], [330, 760, 0.1], [95, 300, 0.12]]) {
+    const g = ctx.createLinearGradient(60, 0, 60 + len, 0);
+    g.addColorStop(0, 'rgba(255,157,92,0)');
+    g.addColorStop(0.5, `rgba(255,157,92,${alpha + 0.14})`);
+    g.addColorStop(1, 'rgba(255,157,92,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(60 + len / 2, y, len / 2, 15, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.strokeStyle = 'rgba(20,8,40,0.8)';
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  for (const [x, y, s] of [[300, 210, 1], [392, 178, 0.7], [1150, 150, 0.85], [1240, 196, 0.6]]) {
+    ctx.beginPath();
+    ctx.moveTo(x - 16 * s, y);
+    ctx.quadraticCurveTo(x - 5 * s, y - 9 * s, x, y);
+    ctx.quadraticCurveTo(x + 5 * s, y - 9 * s, x + 16 * s, y);
+    ctx.stroke();
+  }
+  // A far ridge behind the avenue, for depth in the middle band.
+  ctx.fillStyle = 'rgba(58,28,94,0.85)';
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.78);
+  for (const [x, y] of [[240, 0.7], [470, 0.745], [760, 0.68], [1030, 0.735], [1300, 0.7], [1600, 0.75]]) {
+    ctx.lineTo(x, H * y);
+  }
+  ctx.lineTo(W, H * 0.78);
+  ctx.closePath();
+  ctx.fill();
+
   skyline(ctx, H * 0.78, [[0, 210, 300], [180, 150, 210], [1240, 170, 340], [1400, 200, 250]], '#1c1033', '#ffd76a');
   skyline(ctx, H * 0.8, [[330, 120, 150], [1080, 130, 170]], '#241243', '#ff9d5c');
 

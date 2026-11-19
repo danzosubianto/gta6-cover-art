@@ -13,6 +13,8 @@ export async function runShot(shot, query, api) {
   if (query.get('layout')) api.setLayout(query.get('layout'));
   if (query.get('grade')) api.setGrade(query.get('grade'));
   if (query.get('size')) api.setSize(query.get('size'));
+  // An exported cover carries no editor marks: drop the selection ring.
+  if (shot === 'cover') api.setSelected(-1);
   api.render();
   if (shot === 'cover') document.body.classList.add('shot-cover');
   requestAnimationFrame(() => requestAnimationFrame(() => { window.__shotReady = true; }));
